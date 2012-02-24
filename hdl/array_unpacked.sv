@@ -11,7 +11,7 @@ module array_unpacked #(
 // 2D unpacked arrays (test and reference)
 logic [WB-1:0] array_bg [WA-1:0], rfrnc_bg [WA-1:0];  // big endian array
 logic [0:WB-1] array_lt [0:WA-1], rfrnc_lt [0:WA-1];  // little endian array
-
+logic [0:WB-1] array_im     [WA], rfrnc_im     [WA];  // implicit endian array (little)
 
 initial begin
   test_array_readmemb(WA+1, WB  );
@@ -50,7 +50,7 @@ begin
   if (array_bg === rfrnc_bg)  $display ("PASSED");
   else                        $display ("FAILED");
 
-  // big endian
+  // little endian
   $display("test readmemb (%03d x %03d) into array (%03d x %03d) little endian", wa, wb, WA, WB);
   // clear and polulate reference array
   for (a=0; a<WA; a=a+1)  array_lt [a] = {WB{1'bx}};
@@ -61,6 +61,19 @@ begin
   $writememb ({filename, ".lt"}, array_lt);
   // compare array against reference
   if (array_lt === rfrnc_lt)  $display ("PASSED");
+  else                        $display ("FAILED");
+
+  // implicit endian
+  $display("test readmemb (%03d x %03d) into array (%03d x %03d) implicit endian", wa, wb, WA, WB);
+  // clear and polulate reference array
+  for (a=0; a<WA; a=a+1)  array_im [a] = {WB{1'bx}};
+  for (a=0; a<WA; a=a+1)  rfrnc_im [a] = {WB{1'bx}};
+  for (a=0; a<wa; a=a+1)  rfrnc_im [a] = a;
+  // access file
+  $readmemb  ({filename       }, array_im);
+  $writememb ({filename, ".lt"}, array_im);
+  // compare array against reference
+  if (array_im === rfrnc_im)  $display ("PASSED");
   else                        $display ("FAILED");
 end
 endtask
