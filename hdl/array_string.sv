@@ -1,60 +1,97 @@
-module array_unpacked_2d #(
+module array_string #(
   // parameters for array sizes
   parameter WS = 8  // string length
 )();
 
-// 2D unpacked arrays (test and reference)
-logic [WB-1:0] array_bg [WA-1:0] [WC-1:0], rfrnc_bg [WA-1:0] [WC-1:0];  // big endian array
-logic [0:WB-1] array_lt [0:WA-1] [0:WC-1], rfrnc_lt [0:WA-1] [0:WC-1];  // little endian array
+localparam string ARRAY_S0 = "Janez Novak";
 
+// ASCII text strings
+string string_s1;
+string string_s2 = "Hello, world!";
+
+// arrays
+bit   [0:WS-1][7:0] array_bit;
+logic [0:WS-1][7:0] array_logic;
 
 initial begin
-  test_array_readmemb(WA, WC, WB);
+  test_string_array;
+  test_string_compare;
+  test_string_methods;
 end
 
-task test_array_readmemb (
-  input integer wa, wc, wb
-);
-  integer a, c, b;
-  integer txt_file;
-  logic [64*8-1:0] filename;
+task test_string_array;
+  integer i;
 begin
-  // create reference file
-  $swrite (filename, "array_unpacked_%03d_x_%03d_x_%03d.txt", wa, wc, wb);
-  txt_file = $fopen(filename, "w");
-  for (a=0; a<wa; a=a+1) begin
-    for (c=0; b<wc; c=c+1) begin
-      $fwrite(txt_file, "%x ", {a[WB/2-1:0], c[WB/2-1:0]});
-    end
-    $fwrite(txt_file, "\n");
-  end
-  $fclose(txt_file);
-  
-  // big endian
-  $display("test readmemb (%03d x %03d x %03d) into array (%03d x %03d x %03d) big    endian", wa, wc, wb, WA, WC, WB);
-  // clear and polulate reference array
-  for (a=0; a<WA; a=a+1)  for (c=0; c<WC; c=c+1)  array_bg [a][c] = {WB{1'bx}};
-  for (a=0; a<WA; a=a+1)  for (c=0; c<WC; c=c+1)  rfrnc_bg [a][c] = {WB{1'bx}};
-  for (a=0; a<wa; a=a+1)  for (c=0; c<wc; c=c+1)  rfrnc_bg [a][c] = {a[WB/2-1:0], c[WB/2-1:0]};
-  // access file
-  $readmemh  ({filename       }, array_bg);
-  $writememh ({filename, ".bg"}, array_bg);
-  // compare array against reference
-  if (array_bg === rfrnc_bg)  $display ("PASSED");
-  else                        $display ("FAILED");
+  // assigning a value to a string and display it
+  string_s1 = "Test of strings as arrays.";
+  $write ("test string is: \"%s\"\n", string_s1);
+  // print to a string and display it
+  $swrite (string_s1, "integer=%d, hex=%h, binary=%b", 13, 13, 13);
+  $write ("test string is: \"%s\"\n", string_s1);
+  // implicit cast of bit into string (same 2-level type)
+  array_bit = 64'h3031323334353637;
+  string_s1 = array_bit;
+  $write ("test string is: \"%s\"\n", string_s1);
+  // implicit cast of bit into string (different 4-level type)
+  array_logic = 64'h3031323334353637;
+  string_s1 = array_logic;
+  $write ("test string is: \"%s\"\n", string_s1);
+  // explicit cast of bit into string (different 4-level type)
+  array_logic = 64'h3031323334353637;
+  string_s1 = string'(array_logic);
+  $write ("test string is: \"%s\"\n", string_s1);
+  // concatenation
+  string_s1 = {ARRAY_S0, " ", string_s2, " ", 64'h3031323334353637};
+  $write ("test string is: \"%s\"\n", string_s1);
+  // replication
+  string_s1 = {3{string_s2, " "}};
+  $write ("test string is: \"%s\"\n", string_s1);
+  // index putc
+  string_s1 = string_s2;
+  string_s1[12] = "?.";
+  $write ("test string is: \"%s\"\n", string_s1);
+  string_s1 = string_s2;
+  string_s1[12] = 16'h3f2e;
+  $write ("test string is: \"%s\"\n", string_s1);
+  // index getc
+  $write ("test string is: \"%s\" \"%s\"\n", ARRAY_S0[0], ARRAY_S0[10]);
+  $write ("test string is: \"%s\" \"%s\"\n", string_s2[0], string_s2[12]);
+end
+endtask
 
-  // big endian
-  $display("test readmemb (%03d x %03d x %03d) into array (%03d x %03d x %03d) little endian", wa, wc, wb, WA, WC, WB);
-  // clear and polulate reference array
-  for (a=0; a<WA; a=a+1)  for (c=0; c<WC; c=c+1)  array_lt [a][c] = {WB{1'bx}};
-  for (a=0; a<WA; a=a+1)  for (c=0; c<WC; c=c+1)  rfrnc_lt [a][c] = {WB{1'bx}};
-  for (a=0; a<wa; a=a+1)  for (c=0; c<wc; c=c+1)  rfrnc_lt [a][c] = {a[WB/2-1:0], c[WB/2-1:0]};
-  // access file
-  $readmemh  ({filename       }, array_lt);
-  $writememh ({filename, ".lt"}, array_lt);
-  // compare array against reference
-  if (array_lt === rfrnc_lt)  $display ("PASSED");
-  else                        $display ("FAILED");
+task test_string_compare;
+begin
+  $write ("equality:          \"%s\" == \"%s\" => %b\n", ARRAY_S0, string_s2, ARRAY_S0 == string_s2);
+  $write ("inequality:        \"%s\" != \"%s\" => %b\n", ARRAY_S0, string_s2, ARRAY_S0 != string_s2);
+  $write ("smaller:           \"%s\" <  \"%s\" => %b\n", ARRAY_S0, string_s2, ARRAY_S0 <  string_s2);
+  $write ("smaller or equal:  \"%s\" <= \"%s\" => %b\n", ARRAY_S0, string_s2, ARRAY_S0 <= string_s2);
+  $write ("greater:           \"%s\" >  \"%s\" => %b\n", ARRAY_S0, string_s2, ARRAY_S0 >  string_s2);
+  $write ("greater or equal:  \"%s\" >= \"%s\" => %b\n", ARRAY_S0, string_s2, ARRAY_S0 >= string_s2);
+end
+endtask
+
+task test_string_methods;
+begin
+  // len
+  $write ("len:        %0d\n", ARRAY_S0.len());
+  // putc
+  string_s1 = string_s2;
+  string_s1.putc(12,"?.");
+  $write ("putc:       \"%s\"\n", string_s1);
+  string_s1 = string_s2;
+  string_s1.putc(12, 16'h3f2e);
+  $write ("putc:       \"%s\"\n", string_s1);
+  // getc
+  $write ("getc(0,12): \"%s\" \"%s\"\n", ARRAY_S0[0], ARRAY_S0[10]);
+  $write ("getc(0,12): \"%s\" \"%s\"\n", string_s2[0], string_s2[12]);
+  // toupper
+  $write ("toupper:    \"%s\"\n", ARRAY_S0.toupper());
+  // tolower
+  $write ("tolower:    \"%s\"\n", ARRAY_S0.tolower());
+  // compare
+  $write ("compare:    %0d\n", ARRAY_S0.compare("Janez Novak"));
+  $write ("compare:    %0d\n", ARRAY_S0.compare("janez novak"));
+  $write ("icompare:   %0d\n", ARRAY_S0.icompare("janez novak"));
 end
 endtask
 
