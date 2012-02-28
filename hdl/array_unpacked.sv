@@ -13,6 +13,7 @@ logic [WB-1:0] array_bg [WA-1:0], rfrnc_bg [WA-1:0];  // big endian array
 logic [0:WB-1] array_lt [0:WA-1], rfrnc_lt [0:WA-1];  // little endian array
 logic [0:WB-1] array_im     [WA], rfrnc_im     [WA];  // implicit endian array (little)
 
+
 initial begin
   test_array_querying;
   test_array_readmemb(WA+1, WB  );
@@ -22,40 +23,45 @@ initial begin
   test_array_readmemb(WA  , WB+1);
 end
 
+
 task test_array_querying;
   integer n;
   integer i;
 begin
   $write ("\n");
   n = $dimensions (array_bg);
-  $write ("NOTE: array_bg.dimensions = %d\n", n);
-  $write ("NOTE: array_bg.left       =");  for (i=1; i<=n; i=i+1)  $write (" %d", $left      (array_bg, i));  $write ("\n");
-  $write ("NOTE: array_bg.right      =");  for (i=1; i<=n; i=i+1)  $write (" %d", $right     (array_bg, i));  $write ("\n");
-  $write ("NOTE: array_bg.low        =");  for (i=1; i<=n; i=i+1)  $write (" %d", $low       (array_bg, i));  $write ("\n");
-  $write ("NOTE: array_bg.high       =");  for (i=1; i<=n; i=i+1)  $write (" %d", $high      (array_bg, i));  $write ("\n");
-  $write ("NOTE: array_bg.increment  =");  for (i=1; i<=n; i=i+1)  $write (" %d", $increment (array_bg, i));  $write ("\n");
-  $write ("NOTE: array_bg.size       =");  for (i=1; i<=n; i=i+1)  $write (" %d", $size      (array_bg, i));  $write ("\n");
+  $write ("$bits      (array_bg) = %d\n", $bits(array_bg));
+  $write ("$dimensions(array_bg) = %d\n", n);
+  $write ("$left      (array_bg) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $left      (array_bg, i));  $write ("\n");
+  $write ("$right     (array_bg) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $right     (array_bg, i));  $write ("\n");
+  $write ("$low       (array_bg) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $low       (array_bg, i));  $write ("\n");
+  $write ("$high      (array_bg) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $high      (array_bg, i));  $write ("\n");
+  $write ("$increment (array_bg) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $increment (array_bg, i));  $write ("\n");
+  $write ("$size      (array_bg) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $size      (array_bg, i));  $write ("\n");
   $write ("\n");
   n = $dimensions (array_lt);
-  $write ("NOTE: array_lt.dimensions = %d\n", n);
-  $write ("NOTE: array_lt.left       =");  for (i=1; i<=n; i=i+1)  $write (" %d", $left      (array_lt, i));  $write ("\n");
-  $write ("NOTE: array_lt.right      =");  for (i=1; i<=n; i=i+1)  $write (" %d", $right     (array_lt, i));  $write ("\n");
-  $write ("NOTE: array_lt.low        =");  for (i=1; i<=n; i=i+1)  $write (" %d", $low       (array_lt, i));  $write ("\n");
-  $write ("NOTE: array_lt.high       =");  for (i=1; i<=n; i=i+1)  $write (" %d", $high      (array_lt, i));  $write ("\n");
-  $write ("NOTE: array_lt.increment  =");  for (i=1; i<=n; i=i+1)  $write (" %d", $increment (array_lt, i));  $write ("\n");
-  $write ("NOTE: array_lt.size       =");  for (i=1; i<=n; i=i+1)  $write (" %d", $size      (array_lt, i));  $write ("\n");
+  $write ("$bits      (array_lt) = %d\n", $bits(array_lt));
+  $write ("$dimensions(array_lt) = %d\n", n);
+  $write ("$left      (array_lt) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $left      (array_lt, i));  $write ("\n");
+  $write ("$right     (array_lt) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $right     (array_lt, i));  $write ("\n");
+  $write ("$low       (array_lt) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $low       (array_lt, i));  $write ("\n");
+  $write ("$high      (array_lt) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $high      (array_lt, i));  $write ("\n");
+  $write ("$increment (array_lt) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $increment (array_lt, i));  $write ("\n");
+  $write ("$size      (array_lt) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $size      (array_lt, i));  $write ("\n");
   $write ("\n");
   n = $dimensions (array_im);
-  $write ("NOTE: array_im.dimensions = %d\n", n);
-  $write ("NOTE: array_im.left       =");  for (i=1; i<=n; i=i+1)  $write (" %d", $left      (array_im, i));  $write ("\n");
-  $write ("NOTE: array_im.right      =");  for (i=1; i<=n; i=i+1)  $write (" %d", $right     (array_im, i));  $write ("\n");
-  $write ("NOTE: array_im.low        =");  for (i=1; i<=n; i=i+1)  $write (" %d", $low       (array_im, i));  $write ("\n");
-  $write ("NOTE: array_im.high       =");  for (i=1; i<=n; i=i+1)  $write (" %d", $high      (array_im, i));  $write ("\n");
-  $write ("NOTE: array_im.increment  =");  for (i=1; i<=n; i=i+1)  $write (" %d", $increment (array_im, i));  $write ("\n");
-  $write ("NOTE: array_im.size       =");  for (i=1; i<=n; i=i+1)  $write (" %d", $size      (array_im, i));  $write ("\n");
+  $write ("$bits      (array_im) = %d\n", $bits(array_im));
+  $write ("$dimensions(array_im) = %d\n", n);
+  $write ("$left      (array_im) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $left      (array_im, i));  $write ("\n");
+  $write ("$right     (array_im) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $right     (array_im, i));  $write ("\n");
+  $write ("$low       (array_im) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $low       (array_im, i));  $write ("\n");
+  $write ("$high      (array_im) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $high      (array_im, i));  $write ("\n");
+  $write ("$increment (array_im) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $increment (array_im, i));  $write ("\n");
+  $write ("$size      (array_im) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $size      (array_im, i));  $write ("\n");
   $write ("\n");
 end
 endtask
+
 
 task test_array_readmemb (
   input integer wa, wb
