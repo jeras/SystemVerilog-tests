@@ -1,5 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
+// This file is placed into the Public Domain, for any use, without warranty, //
+// 2012 by Iztok Jeras                                                        //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
 module array_packed #(
@@ -23,6 +30,7 @@ integer i;
 
 initial begin
   test_array_querying;
+  test_array_literals;
   test_write_to_array;
   test_read_from_array;
   test_read_from_parameter_array;
@@ -64,6 +72,30 @@ begin
   $write ("$high      (array_1d) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $high      (array_1d, i));  $write ("\n");
   $write ("$increment (array_1d) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $increment (array_1d, i));  $write ("\n");
   $write ("$size      (array_1d) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $size      (array_1d, i));  $write ("\n");
+  $write ("\n");
+  n = $dimensions (array_bg[WA/2-1:0]);
+  $write ("$bits      (array_bg[WA/2-1:0]) = %d\n", $bits(array_bg[WA/2-1:0]));
+  $write ("$dimensions(array_bg[WA/2-1:0]) = %d\n", n);
+  $write ("$left      (array_bg[WA/2-1:0]) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $left      (array_bg[WA/2-1:0], i));  $write ("\n");
+  $write ("$right     (array_bg[WA/2-1:0]) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $right     (array_bg[WA/2-1:0], i));  $write ("\n");
+  $write ("$low       (array_bg[WA/2-1:0]) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $low       (array_bg[WA/2-1:0], i));  $write ("\n");
+  $write ("$high      (array_bg[WA/2-1:0]) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $high      (array_bg[WA/2-1:0], i));  $write ("\n");
+  $write ("$increment (array_bg[WA/2-1:0]) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $increment (array_bg[WA/2-1:0], i));  $write ("\n");
+  $write ("$size      (array_bg[WA/2-1:0]) =");  for (i=1; i<=n; i=i+1)  $write (" %d", $size      (array_bg[WA/2-1:0], i));  $write ("\n");
+  $write ("\n");
+end
+endtask
+
+
+task test_array_literals;
+begin
+  array_bg = {WA*WB{1'bx}};  array_bg            =  {WA     *WB  {1'b1}   };  $display("%b", array_bg);
+  array_bg = {WA*WB{1'bx}};  array_bg            =  {WA  {  {WB  {1'b1}} }};  $display("%b", array_bg);
+  array_bg = {WA*WB{1'bx}};  array_bg            = '{WA  { '{WB  {1'b1}} }};  $display("%b", array_bg);
+  array_bg = {WA*WB{1'bx}};  array_bg            = '{WA  {  {WB+0{1'b1}} }};  $display("%b", array_bg);
+  array_bg = {WA*WB{1'bx}};  array_bg            = '{WA  {  {WB+1{1'b1}} }};  $display("%b", array_bg);
+  array_bg = {WA*WB{1'bx}};  array_bg            = '{WA  {  {WB-1{1'b1}} }};  $display("%b", array_bg);
+//  array_bg = {WA*WB{1'bx}};  array_bg [WA/2-1:0] = '{WA/2{  {WB  {1'b1}} }};  $display("%b", array_bg);
   $write ("\n");
 end
 endtask

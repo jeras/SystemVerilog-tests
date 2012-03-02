@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+// This file is placed into the Public Domain, for any use, without warranty, //
+// 2012 by Iztok Jeras                                                        //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
 module array_unpacked_2d #(
   // parameters for array sizes
   parameter WA = 8,  // address dimension size (row)

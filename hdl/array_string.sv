@@ -1,5 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
+// This file is placed into the Public Domain, for any use, without warranty, //
+// 2012 by Iztok Jeras                                                        //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
 // tests related to the 'string' type                                         //
 //                                                                            //
 // In ncsim there seem to be issued with getting a single character from a    //

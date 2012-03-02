@@ -1,3 +1,10 @@
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+// This file is placed into the Public Domain, for any use, without warranty, //
+// 2012 by Iztok Jeras                                                        //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
 package package_ipv6;
   typedef struct packed {
     logic [  3:0] Version;
