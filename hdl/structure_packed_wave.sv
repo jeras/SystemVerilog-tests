@@ -6,7 +6,7 @@ typedef struct packed {
 
 
 // testbench module
-module structure_packed_csv_tb ();
+module structure_packed_wave_tb ();
 
 // system signals
 logic   clk = 1;
@@ -40,7 +40,7 @@ end
 initial repeat (20) @ (posedge clk) $finish();
 
 // module instance
-structure_packed_csv structure_packed_csv (
+structure_packed_wave dut (
   // input points
   .point_i_A  (point_i_A),
   .point_i_B  (point_i_B),
@@ -53,7 +53,7 @@ endmodule
 
 
 // RTL module
-module structure_packed_csv (
+module structure_packed_wave (
   // system signals
   input  logic   clk,
   input  logic   rst,
