@@ -1,12 +1,12 @@
 // structure type definition
-typedef struct packed {
+typedef struct {
   logic unsigned [7:0] x;
   logic unsigned [7:0] y;
 } t_point;
 
 
 // testbench module
-module structure_packed_wave_tb ();
+module structure_unpacked_wave_tb ();
 
 // system signals
 logic   clk = 1;
@@ -46,7 +46,7 @@ initial begin
 end
 
 // module instance
-structure_packed_wave dut (
+structure_unpacked_wave dut (
   // system signals
   .clk        (clk),
   .rst        (rst),
@@ -62,7 +62,7 @@ endmodule
 
 
 // RTL module
-module structure_packed_wave (
+module structure_unpacked_wave (
   // system signals
   input  logic   clk,
   input  logic   rst,
