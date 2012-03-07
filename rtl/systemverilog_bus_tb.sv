@@ -24,13 +24,13 @@ logic        bsi_rdy;  // ready (acknowledge)
 logic        bsi_trn;  // data transfer
 logic [31:0] bsi_mem [SIZ];
 
-// output stream
+// stream
 logic        str_vld;
 logic  [7:0] str_bus;
 logic        str_rdy;
 logic        str_trn;  // data transfer
 
-// input bus
+// output bus
 logic        bso_vld;  // valid (chip select)
 logic [31:0] bso_adr;  // address
 logic [31:0] bso_dat;  // data
@@ -78,20 +78,31 @@ if (bsi_trn) bsi_mem [bsi_adr] <= bsi_dat;
 // RTL instance
 ////////////////////////////////////////////////////////////////////////////////
 
+systemverilog_bus_wrap wrap (
+  // system signals
+  .clk      (clk),
+  .rst      (rst),
+  // input bus
+  .bsi_vld  (bsi_vld),
+  .bsi_adr  (bsi_adr),
+  .bsi_dat  (bsi_dat),
+  .bsi_rdy  (bsi_rdy),
+  // stream
+  .str_vld  (str_vld),
+  .str_bus  (str_bus),
+  .str_rdy  (str_rdy),
+  // output bus
+  .bso_vld  (bso_vld),
+  .bso_adr  (bso_adr),
+  .bso_dat  (bso_dat),
+  .bso_rdy  (bso_rdy)
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 // output data monitor
 ////////////////////////////////////////////////////////////////////////////////
 
 assign bso_trn = bso_vld & bso_rdy;
-
-always @ (posedge clk, posedge clk)
-if (rst)          bso_adr <= 32'h00000000;
-else if (bso_trn) bso_adr <= bso_adr + 'd1;
-
-always @ (posedge clk, posedge clk)
-if (rst)          bso_dat <= 32'h00000000;
-else if (bso_trn) bso_dat <= $random(bsi_dat);
 
 always @ (posedge clk)
 if (bso_trn) bso_mem [bso_adr] <= bso_dat;

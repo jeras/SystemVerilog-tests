@@ -60,4 +60,4 @@ else      bus_vld <= bus_trn | pkt_vld;
 
 assign bus_trn = bus_vld & bus_rdy;
 
-endmodule : systemverilog_bus_mux
+endmodule : systemverilog_bus_demux
