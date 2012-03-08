@@ -73,10 +73,10 @@ begin
   $write ("test string is: \"%s\"\n", string_s1);
   // indexed write character
   string_s1 = string_s2;
-  string_s1[12] = "?.";
+  string_s1[12] = "?$";
   $write ("test string is: \"%s\"\n", string_s1);
   string_s1 = string_s2;
-  string_s1[12] = 16'h3f2e;
+  string_s1[12] = 16'h3f24;
   $write ("test string is: \"%s\"\n", string_s1);
   // indexed read character
   $write ("test string is: \"%s\" \"%s\"\n", ARRAY_S0[0], ARRAY_S0[10]);
