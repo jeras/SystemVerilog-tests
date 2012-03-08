@@ -111,10 +111,10 @@ begin
   $write ("len:        %0d\n", ARRAY_S0.len());
   // putc
   string_s1 = string_s2;
-  string_s1.putc(12,"?.");
+  string_s1.putc(12,"?$");
   $write ("putc:       \"%s\"\n", string_s1);
   string_s1 = string_s2;
-  string_s1.putc(12, 16'h3f2e);
+  string_s1.putc(12, 16'h3f24);
   $write ("putc:       \"%s\"\n", string_s1);
   // getc
   $write ("getc(0,12): \"%s\" \"%s\"\n", ARRAY_S0[0], ARRAY_S0[10]);
