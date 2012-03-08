@@ -27,12 +27,14 @@ logic       bus_trn;
 logic       str_trn;
 
 logic [2:0] pkt_cnt;
+logic       pkt_end;
+
 t_bus       pkt_bus;
 t_str       pkt_str;
 
 assign bus_trn = bus_vld & bus_rdy;
 
-assign bus_rdy = ~str_vld | (str_rdy & (&pkt_cnt));
+assign bus_rdy = ~str_vld | pkt_end;
 
 always @ (posedge clk)
 if (bus_trn) begin
@@ -44,11 +46,13 @@ assign pkt_str = pkt_bus;
 
 always @ (posedge clk, posedge rst)
 if (rst)           str_vld <= 1'b0;
-else               str_vld <= bus_trn | (str_vld & ~(str_rdy & (&pkt_cnt)));
+else               str_vld <= bus_trn | (str_vld & ~pkt_end);
 
 always @ (posedge clk, posedge rst)
 if (rst)           pkt_cnt <= 4'd0;
 else if (str_trn)  pkt_cnt <= pkt_cnt + 3'd1;
+
+assign pkt_end = str_rdy & (&pkt_cnt);
 
 assign str_bus = pkt_str [pkt_cnt];
 

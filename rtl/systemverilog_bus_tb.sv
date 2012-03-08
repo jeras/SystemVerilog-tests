@@ -53,7 +53,7 @@ end
 // reset is removed after a delay
 initial begin
   repeat (64) @ (posedge clk);
-  $finish();
+  $stop();
 end
 
 ////////////////////////////////////////////////////////////////////////////////
