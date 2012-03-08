@@ -1,0 +1,70 @@
+#--  Synopsys, Inc.
+#--  Version F-2011.09-SP1 
+#--  Project file systemverilog_bus_synplify.prj
+
+#project files
+add_file -verilog -vlog_std sysv "./systemverilog_bus_def.sv"
+add_file -verilog -vlog_std sysv "./systemverilog_bus_demux.sv"
+add_file -verilog -vlog_std sysv "./systemverilog_bus_mux.sv"
+add_file -verilog -vlog_std sysv "./systemverilog_bus_wrap.sv"
+
+
+#implementation: "stratix4"
+impl -add stratix4 -type fpga
+
+#
+#implementation attributes
+
+set_option -vlog_std sysv
+set_option -project_relative_includes 1
+
+#device options
+set_option -technology STRATIXIV
+set_option -part EP4SGX70D
+set_option -package FC29
+set_option -speed_grade -2X
+set_option -part_companion ""
+
+#compilation/mapping options
+set_option -use_fsm_explorer 0
+set_option -top_module "systemverilog_bus_wrap"
+
+# mapper_options
+set_option -frequency auto
+set_option -write_verilog 0
+set_option -write_vhdl 0
+
+# Altera STRATIX
+set_option -run_prop_extract 1
+set_option -maxfan 30
+set_option -disable_io_insertion 0
+set_option -pipe 1
+set_option -update_models_cp 0
+set_option -retiming 0
+set_option -no_sequential_opt 0
+set_option -fixgatedclocks 3
+set_option -fixgeneratedclocks 3
+set_option -quartus_version 11.1
+
+# NFilter
+set_option -popfeed 0
+set_option -constprop 0
+set_option -createhierarchy 0
+
+# sequential_optimization_options
+set_option -symbolic_fsm_compiler 1
+
+# Compiler Options
+set_option -compiler_compatible 0
+set_option -resource_sharing 1
+set_option -multi_file_compilation_unit 1
+
+#VIF options
+set_option -write_vif 1
+
+#automatic place and route (vendor) options
+set_option -write_apr_constraint 1
+
+#set result format/file last
+project -result_file "./stratix4/stratix4.vqm"
+impl -active "stratix4"
