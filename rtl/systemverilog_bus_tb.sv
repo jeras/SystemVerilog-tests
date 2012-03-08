@@ -10,7 +10,7 @@ import package_str::*;
 
 module systemverilog_bus_tb ();
 
-parameter SIZ = 256;
+parameter SIZ = 10;
 
 // system signals
 logic        clk = 1'b1;
@@ -23,12 +23,15 @@ logic [31:0] bsi_dat;  // data
 logic        bsi_rdy;  // ready (acknowledge)
 logic        bsi_trn;  // data transfer
 logic [31:0] bsi_mem [SIZ];
+// output stream
+logic        sto_vld;
+logic  [7:0] sto_bus;
+logic        sto_rdy;
 
-// stream
-logic        str_vld;
-logic  [7:0] str_bus;
-logic        str_rdy;
-
+// input stream
+logic        sti_vld;
+logic  [7:0] sti_bus;
+logic        sti_rdy;
 // output bus
 logic        bso_vld;  // valid (chip select)
 logic [31:0] bso_adr;  // address
@@ -36,6 +39,8 @@ logic [31:0] bso_dat;  // data
 logic        bso_rdy;  // ready (acknowledge)
 logic        bso_trn;  // data transfer
 logic [31:0] bso_mem [SIZ];
+
+integer cnt = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
 // clock and reset
@@ -52,7 +57,12 @@ end
 
 // reset is removed after a delay
 initial begin
-  repeat (64) @ (posedge clk);
+  wait (cnt == SIZ);
+  repeat (4) @ (posedge clk);
+  if (bsi_mem === bso_mem)  $display ("PASSED");
+  else                      $display ("FAILED");
+  for (cnt=0; cnt<SIZ; cnt=cnt+1)
+    $display ("@%08h i:%08h o:%08h", cnt, bsi_mem [cnt], bso_mem [cnt]);
   $stop();
 end
 
@@ -62,17 +72,17 @@ end
 
 assign bsi_trn = bsi_vld & bsi_rdy;
 
-always @ (posedge clk, posedge clk)
+always @ (posedge clk, posedge rst)
 if (rst)          bsi_vld = 1'b0;
-else              bsi_vld = 1'b1;
+else              bsi_vld = (bsi_adr < SIZ);
 
-always @ (posedge clk, posedge clk)
+always @ (posedge clk, posedge rst)
 if (rst)          bsi_adr <= 32'h00000000;
 else if (bsi_trn) bsi_adr <= bsi_adr + 'd1;
 
-always @ (posedge clk, posedge clk)
+always @ (posedge clk, posedge rst)
 if (rst)          bsi_dat <= 32'h00000000;
-else if (bsi_trn) bsi_dat <= $random(bsi_dat);
+else if (bsi_trn) bsi_dat <= $random();
 
 always @ (posedge clk)
 if (bsi_trn) bsi_mem [bsi_adr] <= bsi_dat;
@@ -90,10 +100,14 @@ systemverilog_bus_wrap wrap (
   .bsi_adr  (bsi_adr),
   .bsi_dat  (bsi_dat),
   .bsi_rdy  (bsi_rdy),
-  // stream
-  .str_vld  (str_vld),
-  .str_bus  (str_bus),
-  .str_rdy  (str_rdy),
+  // output stream
+  .sto_vld  (sto_vld),
+  .sto_bus  (sto_bus),
+  .sto_rdy  (sto_rdy),
+  // input stream
+  .sti_vld  (sti_vld),
+  .sti_bus  (sti_bus),
+  .sti_rdy  (sti_rdy),
   // output bus
   .bso_vld  (bso_vld),
   .bso_adr  (bso_adr),
@@ -101,16 +115,24 @@ systemverilog_bus_wrap wrap (
   .bso_rdy  (bso_rdy)
 );
 
+assign sti_vld = sto_vld;
+assign sti_bus = sto_bus;
+assign sto_rdy = sti_rdy;
+
 ////////////////////////////////////////////////////////////////////////////////
 // output data monitor
 ////////////////////////////////////////////////////////////////////////////////
 
 assign bso_trn = bso_vld & bso_rdy;
 
+always @ (posedge clk, posedge rst)
+if (rst)          cnt <= 0;
+else if (bso_trn) cnt <= cnt + 1;
+
 always @ (posedge clk)
 if (bso_trn) bso_mem [bso_adr] <= bso_dat;
 
-always @ (posedge clk, posedge clk)
+always @ (posedge clk, posedge rst)
 if (rst)  bso_rdy = 1'b0;
 else      bso_rdy = 1'b1;
 
