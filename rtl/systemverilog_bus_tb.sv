@@ -28,7 +28,6 @@ logic [31:0] bsi_mem [SIZ];
 logic        str_vld;
 logic  [7:0] str_bus;
 logic        str_rdy;
-logic        str_trn;  // data transfer
 
 // output bus
 logic        bso_vld;  // valid (chip select)
@@ -53,7 +52,7 @@ end
 
 // reset is removed after a delay
 initial begin
-  repeat (16) @ (posedge clk);
+  repeat (64) @ (posedge clk);
   $finish();
 end
 
@@ -62,6 +61,10 @@ end
 ////////////////////////////////////////////////////////////////////////////////
 
 assign bsi_trn = bsi_vld & bsi_rdy;
+
+always @ (posedge clk, posedge clk)
+if (rst)          bsi_vld = 1'b0;
+else              bsi_vld = 1'b1;
 
 always @ (posedge clk, posedge clk)
 if (rst)          bsi_adr <= 32'h00000000;
@@ -106,5 +109,9 @@ assign bso_trn = bso_vld & bso_rdy;
 
 always @ (posedge clk)
 if (bso_trn) bso_mem [bso_adr] <= bso_dat;
+
+always @ (posedge clk, posedge clk)
+if (rst)  bso_rdy = 1'b0;
+else      bso_rdy = 1'b1;
 
 endmodule : systemverilog_bus_tb

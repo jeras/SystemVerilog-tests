@@ -33,7 +33,7 @@ logic       pkt_vld;
 
 assign str_trn = str_vld & str_rdy;
 
-assign str_ack = 1;
+assign str_rdy = 1;
 
 always @ (posedge clk, posedge rst)
 if (rst)  pkt_cnt <= 3'd0;

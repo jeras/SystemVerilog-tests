@@ -7,8 +7,10 @@
 
 package package_bus;
   typedef struct packed {
-    logic [3:0] [7:0] adr;  // address
-    logic [3:0] [7:0] dat;  // data
+//    logic [3:0] [7:0] adr;  // address
+//    logic [3:0] [7:0] dat;  // data
+    logic [31:0] dat;  // data
+    logic [31:0] adr;  // address
   } t_bus;
 endpackage : package_bus
 
