@@ -48,8 +48,9 @@ module sv_bus_mux_demux_tb ();
 parameter SIZ = 10;
 
 // system signals
-logic        clk = 1'b1;
-logic        rst = 1'b1;
+logic        clk = 1'b1;  // clock
+logic        rst = 1'b1;  // reset
+integer      rst_cnt = 0;
 
 // input bus
 logic        bsi_vld;  // valid (chip select)
@@ -74,8 +75,7 @@ logic [31:0] bso_dat;  // data
 logic        bso_rdy;  // ready (acknowledge)
 logic        bso_trn;  // data transfer
 logic [31:0] bso_mem [SIZ];
-
-integer cnt = 0;
+integer      bso_cnt = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
 // clock and reset
@@ -85,17 +85,18 @@ integer cnt = 0;
 always #5  clk = ~clk;
 
 // reset is removed after a delay
-initial begin
-  repeat (4) @ (posedge clk);
-  rst = 0;
+always @ (posedge clk)
+begin
+  rst_cnt <= rst_cnt + 1;
+  rst     <= rst_cnt <= 3;
 end
 
 // reset is removed after a delay
-initial begin
-  wait (cnt == SIZ);
-  repeat (4) @ (posedge clk);
+always @ (posedge clk)
+if (bso_cnt == SIZ) begin
   if (bsi_mem === bso_mem)  $display ("PASSED");
   else                      $display ("FAILED");
+  $finish();
 end
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -166,8 +167,8 @@ assign bso_trn = bso_vld & bso_rdy;
 
 // output transfer counter used to end the test
 always @ (posedge clk, posedge rst)
-if (rst)          cnt <= 0;
-else if (bso_trn) cnt <= cnt + 1;
+if (rst)           bso_cnt <= 0;
+else if (bso_trn)  bso_cnt <= bso_cnt + 1;
 
 // storing transferred data into memory for final check
 always @ (posedge clk)
@@ -176,7 +177,7 @@ if (bso_trn)  bso_mem [bso_adr] <= bso_dat;
 // every output transfer against expected value stored in memory
 always @ (posedge clk)
 if (bso_trn && (bsi_mem [bso_adr] !== bso_dat))
-$display ("@%08h i:%08h o:%08h", cnt, bsi_mem [cnt], bso_mem [cnt]);
+$display ("@%08h i:%08h o:%08h", bso_adr, bsi_mem [bso_adr], bso_dat);
 
 // ready is active for SIZ transfers
 always @ (posedge clk, posedge rst)
