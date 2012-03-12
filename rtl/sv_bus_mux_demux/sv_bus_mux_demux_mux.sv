@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-// This file is placed into the Public Domain, for any use, without warranty, //
+// This file is placed into the Public Domain, for any use, without warranty. //
 // 2012 by Iztok Jeras                                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
@@ -8,7 +8,7 @@
 import package_bus::*;
 import package_str::*;
 
-module systemverilog_bus_mux (
+module sv_bus_mux_demux_mux (
   // system signals
   input  logic        clk,
   input  logic        rst,
@@ -58,4 +58,4 @@ assign str_bus = pkt_str [pkt_cnt];
 
 assign str_trn = str_vld & str_rdy;
 
-endmodule : systemverilog_bus_mux
+endmodule : sv_bus_mux_demux_mux

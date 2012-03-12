@@ -1,11 +1,31 @@
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
-// This file is placed into the Public Domain, for any use, without warranty, //
+// This file is placed into the Public Domain, for any use, without warranty. //
 // 2012 by Iztok Jeras                                                        //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
-module systemverilog_bus_wrap (
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+// This wrapper contains a bus multiplexer and a bus demultiplexer. Both      //
+// modules have all ports exposed an there are no signals connecting them.    //
+//                                                                            //
+//                           ---------------------                            //
+//                           |        wrap       |                            //
+//                           |                   |                            //
+//                           |    -----------    |                            //
+//                   bsi ->  | -> |   mux   | -> | -> sto                     //
+//                           |    -----------    |                            //
+//                           |                   |                            //
+//                           |    -----------    |                            //
+//                   bso <-  | <- |  demux  | <- | <- sto                     //
+//                           |    -----------    |                            //
+//                           |                   |                            //
+//                           ---------------------                            //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+module sv_bus_mux_demux_wrap (
   // system signals
   input  logic        clk,
   input  logic        rst,
@@ -29,7 +49,7 @@ module systemverilog_bus_wrap (
   input  logic        bso_rdy   // ready (acknowledge)
 );
 
-systemverilog_bus_mux mux (
+sv_bus_mux_demux_mux mux (
   // system signals
   .clk      (clk),
   .rst      (rst),
@@ -44,7 +64,7 @@ systemverilog_bus_mux mux (
   .str_rdy  (sto_rdy)
 );
 
-systemverilog_bus_demux demux (
+sv_bus_mux_demux_demux demux (
   // system signals
   .clk      (clk),
   .rst      (rst),
@@ -59,4 +79,4 @@ systemverilog_bus_demux demux (
   .bus_rdy  (bso_rdy)
 );
 
-endmodule : systemverilog_bus_wrap
+endmodule : sv_bus_mux_demux_wrap

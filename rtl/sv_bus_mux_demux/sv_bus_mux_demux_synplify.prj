@@ -1,12 +1,12 @@
 #--  Synopsys, Inc.
 #--  Version F-2011.09-SP1 
-#--  Project file systemverilog_bus_synplify.prj
+#--  Project file sv_bus_mux_demux_synplify.prj
 
 #project files
-add_file -verilog -vlog_std sysv "./systemverilog_bus_def.sv"
-add_file -verilog -vlog_std sysv "./systemverilog_bus_demux.sv"
-add_file -verilog -vlog_std sysv "./systemverilog_bus_mux.sv"
-add_file -verilog -vlog_std sysv "./systemverilog_bus_wrap.sv"
+add_file -verilog -vlog_std sysv "./sv_bus_mux_demux_def.sv"
+add_file -verilog -vlog_std sysv "./sv_bus_mux_demux_demux.sv"
+add_file -verilog -vlog_std sysv "./sv_bus_mux_demux_mux.sv"
+add_file -verilog -vlog_std sysv "./sv_bus_mux_demux_wrap.sv"
 
 
 #implementation: "stratix4"
@@ -27,7 +27,7 @@ set_option -part_companion ""
 
 #compilation/mapping options
 set_option -use_fsm_explorer 0
-set_option -top_module "systemverilog_bus_wrap"
+set_option -top_module "sv_bus_mux_demux_wrap"
 
 # mapper_options
 set_option -frequency auto
