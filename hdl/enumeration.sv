@@ -21,7 +21,7 @@ typedef enum bit {OFF, ON} t_switch;
 t_switch switch;
 
 // numbering examples
-enum int {father, mother, son[2], doughter, gerbil, dog[3]=10, cat[2:5]=20, car[3:1]=30} family;
+enum int {father, mother, son[2], daughter, gerbil, dog[3]=10, cat[2:5]=20, car[3:1]=30} family;
 
 `ifdef ENUMERATION_SYNTAX_ERROR
 `endif
