@@ -7,6 +7,7 @@
 
 import package_bus::*;
 import package_str::*;
+import package_uni::*;
 
 module sv_bus_mux_demux_mux (
   // system signals
@@ -29,8 +30,9 @@ logic       str_trn;  // stream data transfer
 logic [2:0] pkt_cnt;  // packet byte counter
 logic       pkt_end;  // packet byte counter end
 
-t_bus       pkt_bus;  // transfer packet as a structure
-t_str       pkt_str;  // transfer packet as an array
+//t_bus       pkt_bus;  // transfer packet as a structure
+//t_str       pkt_str;  // transfer packet as an array
+t_uni       pkt_uni;  // transfer packet as an union
 
 // bus data transfer
 assign bus_trn = bus_vld & bus_rdy;
@@ -41,12 +43,9 @@ assign bus_rdy = ~str_vld | pkt_end;
 // writing input address/data into a structure
 always @ (posedge clk)
 if (bus_trn) begin
-  pkt_bus.adr <= bus_adr;
-  pkt_bus.dat <= bus_dat;
+  pkt_uni.bus.adr <= bus_adr;
+  pkt_uni.bus.dat <= bus_dat;
 end
-
-// TODO, this should be an union
-assign pkt_str = pkt_bus;
 
 // output valid is set by an input transfer
 // or cleared by the last output transfer
@@ -63,7 +62,7 @@ else if (str_trn)  pkt_cnt <= pkt_cnt + 3'd1;
 assign pkt_end = str_rdy & (&pkt_cnt);
 
 // TODO, this should be a registered signal
-assign str_bus = pkt_str [pkt_cnt];
+assign str_bus = pkt_uni.str [pkt_cnt];
 
 // stream data transfer
 assign str_trn = str_vld & str_rdy;

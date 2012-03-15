@@ -17,3 +17,13 @@ endpackage : package_bus
 package package_str;
   typedef logic [7:0][7:0] t_str;
 endpackage : package_str
+
+// union of the structure and array representation
+package package_uni;
+  import package_bus::*;
+  import package_str::*;
+  typedef union packed {
+    t_bus bus;
+    t_str str;
+  } t_uni;
+endpackage : package_uni
