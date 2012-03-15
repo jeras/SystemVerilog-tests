@@ -39,10 +39,6 @@
 
 `timescale 1ns/1ps
 
-// import data types from external file
-import package_bus::*;
-import package_str::*;
-
 module sv_bus_mux_demux_tb ();
 
 parameter SIZ = 10;
