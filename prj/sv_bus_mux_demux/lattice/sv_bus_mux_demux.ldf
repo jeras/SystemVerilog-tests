@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BaliProject version="1.3" title="sv_bus_mux_demux" device="LFXP10C-5F388C" synthesis="synplify" default_implementation="sv_bus_mux_demux">
+    <Options/>
+    <Implementation title="sv_bus_mux_demux" dir="sv_bus_mux_demux" description="sv_bus_mux_demux" default_strategy="Strategy1">
+        <Options top="sv_bus_mux_demux_wrap"/>
+        <Source name="../hdl/sv_bus_mux_demux_def.sv" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="../hdl/sv_bus_mux_demux_demux.sv" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="../hdl/sv_bus_mux_demux_mux.sv" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="../hdl/sv_bus_mux_demux_wrap.sv" type="Verilog" type_short="Verilog">
+            <Options/>
+        </Source>
+        <Source name="sv_bus_mux_demux.lpf" type="Logic Preference" type_short="LPF">
+            <Options/>
+        </Source>
+    </Implementation>
+    <Strategy name="Strategy1" file="Strategy1.sty"/>
+</BaliProject>
