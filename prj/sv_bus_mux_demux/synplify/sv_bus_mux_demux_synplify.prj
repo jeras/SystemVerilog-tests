@@ -3,10 +3,10 @@
 #--  Project file sv_bus_mux_demux_synplify.prj
 
 #project files
-add_file -verilog -vlog_std sysv "./sv_bus_mux_demux_def.sv"
-add_file -verilog -vlog_std sysv "./sv_bus_mux_demux_demux.sv"
-add_file -verilog -vlog_std sysv "./sv_bus_mux_demux_mux.sv"
-add_file -verilog -vlog_std sysv "./sv_bus_mux_demux_wrap.sv"
+add_file -verilog -vlog_std sysv "../hdl/sv_bus_mux_demux_def.sv"
+add_file -verilog -vlog_std sysv "../hdl/sv_bus_mux_demux_demux.sv"
+add_file -verilog -vlog_std sysv "../hdl/sv_bus_mux_demux_mux.sv"
+add_file -verilog -vlog_std sysv "../hdl/sv_bus_mux_demux_wrap.sv"
 
 
 #implementation: "stratix4"
