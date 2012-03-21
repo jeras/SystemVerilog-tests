@@ -22,13 +22,45 @@ logic [0:WB-1] array_im     [WA], rfrnc_im     [WA];  // implicit endian array (
 
 
 initial begin
-  test_array_querying;
-  test_array_readmemb(WA+1, WB  );
-  test_array_readmemb(WA-1, WB  );
-  test_array_readmemb(WA  , WB  );
-  test_array_readmemb(WA  , WB-1);
-  test_array_readmemb(WA  , WB+1);
+  test_array_methods_reduction;
+  test_array_methods_locator;
+//  test_array_querying;
+//  test_array_readmemb(WA+1, WB  );
+//  test_array_readmemb(WA-1, WB  );
+//  test_array_readmemb(WA  , WB  );
+//  test_array_readmemb(WA  , WB-1);
+//  test_array_readmemb(WA  , WB+1);
 end
+
+
+task test_array_methods_reduction;
+  int i;
+  int n;
+begin
+  for (i=0; i<WA; i=i+1)  array_bg[i] = i+1;
+  $write ("\n");
+  $write ("array_bg.sum     = %0d'h%x\n", WB, array_bg.sum    );
+  $write ("array_bg.product = %0d'h%x\n", WB, array_bg.product);
+  $write ("array_bg.and     = %0d'h%x\n", WB, array_bg.and    );
+  $write ("array_bg.or      = %0d'h%x\n", WB, array_bg.or     );
+  $write ("array_bg.xor     = %0d'h%x\n", WB, array_bg.xor    );
+  $write ("\n");
+end
+endtask
+
+
+task test_array_methods_locator;
+  int i;
+  int n;
+  logic [WB-1:0] queue [$];
+begin
+  for (i=0; i<WA; i=i+1)  array_bg[i] = i+1;
+  $write ("\n");
+  queue = array_bg.min;  $write ("array_bg.min     = %d\n", queue.pop_front()    );
+  queue = array_bg.max;  $write ("array_bg.max     = %d\n", queue.pop_front()    );
+  $write ("\n");
+end
+endtask
 
 
 task test_array_querying;
