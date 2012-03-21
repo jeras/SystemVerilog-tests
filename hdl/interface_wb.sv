@@ -75,6 +75,10 @@ interface zbus #(
 
 endinterface : zbus
 
+// interface instances
+zbus mosi (.clk (clk), .rst (rst));
+zbus miso (.clk (clk), .rst (rst));
+
 ////////////////////////////////////////////////////////////////////////////////
 // master demo
 ////////////////////////////////////////////////////////////////////////////////
@@ -104,21 +108,11 @@ module zbus_model_s #(
 endmodule
 
 ////////////////////////////////////////////////////////////////////////////////
-// slave demo
+// testbench
 ////////////////////////////////////////////////////////////////////////////////
 
-module zbus_tb (
-);
+module zbus_tb;
 
-zbus mosi (
-  .clk (clk),
-  .rst (rst)
-);
-
-zbus miso (
-  .clk (clk),
-  .rst (rst)
-);
 
 zbus_model_m m (
   .zbus_w (mosi),
@@ -130,4 +124,4 @@ zbus_model_s s (
   .zbus_r (miso)
 );
 
-endmodule
+endmodule zbus_tb
