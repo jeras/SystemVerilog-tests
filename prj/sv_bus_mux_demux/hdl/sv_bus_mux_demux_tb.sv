@@ -104,8 +104,8 @@ assign bsi_trn = bsi_vld & bsi_rdy;
 
 // valid (for SIZ transfers)
 always @ (posedge clk, posedge rst)
-if (rst)          bsi_vld = 1'b0;
-else              bsi_vld = (bsi_adr < SIZ);
+if (rst)          bsi_vld <= 1'b0;
+else              bsi_vld <= (bsi_adr < SIZ);
 
 // address (increments every transfer)
 always @ (posedge clk, posedge rst)
@@ -177,7 +177,7 @@ $display ("@%08h i:%08h o:%08h", bso_adr, bsi_mem [bso_adr], bso_dat);
 
 // ready is active for SIZ transfers
 always @ (posedge clk, posedge rst)
-if (rst)  bso_rdy = 1'b0;
-else      bso_rdy = 1'b1;
+if (rst)  bso_rdy <= 1'b0;
+else      bso_rdy <= 1'b1;
 
 endmodule : sv_bus_mux_demux_tb
